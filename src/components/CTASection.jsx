@@ -1,61 +1,41 @@
-import React, { useState } from 'react';
-import { Send, MessageSquare, Download, Check } from 'lucide-react';
+import React from 'react';
+import { Compass, MessageSquare, Download, Calendar } from 'lucide-react';
 
-export default function CTASection() {
-  const [bookingMessage, setBookingMessage] = useState('');
-
-  const handleBook = () => {
-    setBookingMessage('✨ Thank you! Booking system integration is in progress. Please contact us on WhatsApp (+91 99999 99999) for immediate slot booking!');
-    setTimeout(() => setBookingMessage(''), 8000);
-  };
-
-  const whatsappLink = `https://wa.me/919999999999?text=${encodeURIComponent(
-    "Hi, I completed my free Numerology reading and would like to book a detailed consultation for my career, relationships, and name correction."
-  )}`;
-
+export default function CTASection({ onContactClick, onDownloadClick }) {
   return (
     <div className="card cta-card glow-gold-border animation-fade-in-up delay-500 hide-on-print">
       <div className="cta-gradient-overlay"></div>
       
       <div className="cta-content">
-        <span className="cta-tagline">Premium Vedic Insight</span>
-        <h2>Unlock Your Comprehensive Personal Numerology Report</h2>
+        <div className="logo-badge mb-2">
+          <Compass className="icon-gold animate-spin-slow" size={14} />
+          <span>Detailed Consultation</span>
+        </div>
+        <h2>Unlock Your Comprehensive Vastu & Numerology Audit</h2>
         <p className="cta-desc">
-          Go beyond the basics. Discover deep insights into your career trajectory, marriage & relationship compatibility, scientific name corrections, mobile phone numerology, personalized remedies, and month-by-month predictions.
+          Vedic blueprints only tell part of the story. Receive tailored guidance on commercial layout zoning, residential Vastu corrections (without structural demolition), business name signature alignment, mobile number vibrations, and yearly remedial charts.
         </p>
 
-        {bookingMessage && (
-          <div className="booking-alert-box animation-fade-in-up">
-            <span>{bookingMessage}</span>
-          </div>
-        )}
-
         <div className="cta-actions">
-          <button onClick={handleBook} className="btn btn-secondary btn-cta">
-            <Send size={18} />
-            <span>Book Appointment</span>
+          <button onClick={onContactClick} className="btn btn-primary btn-cta">
+            <Calendar size={18} />
+            <span>Connect With Experts</span>
           </button>
 
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary btn-cta btn-whatsapp"
-          >
+          <button onClick={onContactClick} className="btn btn-secondary btn-cta btn-whatsapp-dummy">
             <MessageSquare size={18} />
-            <span>Contact on WhatsApp</span>
-          </a>
+            <span>Chat on WhatsApp</span>
+          </button>
 
-          <button className="btn btn-disabled btn-cta" disabled title="Coming Soon">
+          <button onClick={onDownloadClick} className="btn btn-secondary btn-cta">
             <Download size={18} />
-            <span>Download Sample PDF</span>
-            <span className="btn-tag">Soon</span>
+            <span>Download PDF Report</span>
           </button>
         </div>
 
         <div className="cta-footer-info text-xs text-muted">
-          <span>* Dedicated 1-on-1 consultation with certified numerologists.</span>
-          <span>• Secured via direct WhatsApp channel (+91 99999 99999).</span>
+          <span>* Dedicated virtual and in-person consultations.</span>
+          <span>• Direct routing to Anand (Hardik J Vvaidhya) or Vadodara (Payal Trivedi) centers.</span>
         </div>
       </div>
     </div>

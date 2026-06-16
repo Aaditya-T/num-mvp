@@ -19,6 +19,9 @@ export default function Form({ onSubmit }) {
     if (!dob) {
       newErrors.dob = 'Janam Tithi (Date of Birth) is required for calculations.';
     }
+    if (!mobile.trim()) {
+      newErrors.mobile = 'Mobile number is required to save your Vedic readings.';
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -72,6 +75,15 @@ export default function Form({ onSubmit }) {
               id="birthDate"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
+              onClick={(e) => {
+                try {
+                  if (typeof e.target.showPicker === 'function') {
+                    e.target.showPicker();
+                  }
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
               className="form-input"
             />
           </div>
@@ -99,13 +111,12 @@ export default function Form({ onSubmit }) {
             </div>
           </div>
         </div>
-
         {/* Mobile Number & Language Preference */}
         <div className="form-row split-row">
           {/* Mobile Number */}
-          <div className="form-group flex-1">
+          <div className={`form-group flex-1 ${errors.mobile ? 'has-error' : ''}`}>
             <label htmlFor="mobileNumber">
-              <Phone size={16} /> Mobile Number <span className="optional">(Optional)</span>
+              <Phone size={16} /> Mobile Number <span className="required">*</span>
             </label>
             <div className="input-wrapper">
               <input
@@ -117,6 +128,7 @@ export default function Form({ onSubmit }) {
                 className="form-input"
               />
             </div>
+            {errors.mobile && <span className="form-error-msg">{errors.mobile}</span>}
           </div>
 
           {/* Language Preference */}
@@ -133,7 +145,7 @@ export default function Form({ onSubmit }) {
               >
                 <option value="English">English</option>
                 <option value="Hindi">Hindi (हिंदी)</option>
-                <option value="Hinglish">Hinglish</option>
+                <option value="Gujarati">Gujarati (ગુજરાતી)</option>
               </select>
             </div>
           </div>

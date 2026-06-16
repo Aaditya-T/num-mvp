@@ -1,13 +1,17 @@
 import React from 'react';
 import { Award, Zap } from 'lucide-react';
-import { PLANE_TEMPLATES } from '../utils/constants';
+import { PLANE_TRANSLATIONS, TRANSLATIONS } from '../utils/constants';
 import { calculatePlanes } from '../utils/numerology';
 
-export default function PlanesCard({ gridCounts }) {
+export default function PlanesCard({ gridCounts, language = 'English' }) {
+  const activeLang = TRANSLATIONS[language] ? language : 'English';
+  const labels = TRANSLATIONS[activeLang];
+  const planesDict = PLANE_TRANSLATIONS[activeLang];
+  
   const { planes, strongestPlanes, maxPercent } = calculatePlanes(gridCounts);
 
   const getPlaneDisplayName = (key) => {
-    return PLANE_TEMPLATES[key]?.name || key;
+    return planesDict[key]?.name || key;
   };
 
   return (
@@ -15,7 +19,7 @@ export default function PlanesCard({ gridCounts }) {
       <div className="card-header justify-between">
         <div className="header-title-wrapper">
           <Zap className="icon-gold" size={20} />
-          <h2>Lo Shu Planes (Yogas)</h2>
+          <h2>{labels.planesTitle}</h2>
         </div>
       </div>
 
@@ -25,9 +29,9 @@ export default function PlanesCard({ gridCounts }) {
           <div className="strongest-plane-alert glow-gold-border">
             <Award className="icon-gold animate-bounce" size={24} />
             <div className="strongest-plane-content">
-              <h3>Strongest Life Energy: {maxPercent}%</h3>
+              <h3>{labels.strongestEnergy}: {maxPercent}%</h3>
               <p>
-                Your most active and influential grid path: {' '}
+                {labels.strongestEnergyDesc}: {' '}
                 <strong>
                   {strongestPlanes.map(key => getPlaneDisplayName(key).split(' (')[0]).join(' & ')}
                 </strong>.
@@ -38,15 +42,15 @@ export default function PlanesCard({ gridCounts }) {
           <div className="strongest-plane-alert muted-border">
             <Zap className="text-muted" size={24} />
             <div className="strongest-plane-content">
-              <h3>Dormant Energies</h3>
-              <p>Your plane energies are in a quiet phase. Focus on grounding and activating routine structure.</p>
+              <h3>{labels.dormantEnergy}</h3>
+              <p>{labels.dormantEnergyDesc}</p>
             </div>
           </div>
         )}
 
         <div className="planes-grid">
           {Object.entries(planes).map(([key, data]) => {
-            const template = PLANE_TEMPLATES[key];
+            const template = planesDict[key];
             if (!template) return null;
 
             // Determine bar color based on percentage
@@ -60,7 +64,7 @@ export default function PlanesCard({ gridCounts }) {
                 <div className="plane-meta">
                   <span className="plane-name font-semibold">{template.name}</span>
                   <span className="plane-numbers text-xs text-gold font-mono">
-                    [{template.numbers.join(', ')}]
+                    [{data.numbers.join(', ')}]
                   </span>
                 </div>
 
@@ -80,7 +84,7 @@ export default function PlanesCard({ gridCounts }) {
                 </div>
 
                 <p className="plane-desc text-xs text-muted">
-                  {template.description}
+                  {template.desc}
                 </p>
               </div>
             );

@@ -1,7 +1,11 @@
 import React from 'react';
-import { Grid, HelpCircle } from 'lucide-react';
+import { Grid } from 'lucide-react';
+import { TRANSLATIONS } from '../utils/constants';
 
-export default function LoShuGrid({ gridCounts, includeExtra, onToggle }) {
+export default function LoShuGrid({ gridCounts, includeExtra, onToggle, language = 'English' }) {
+  const activeLang = TRANSLATIONS[language] ? language : 'English';
+  const labels = TRANSLATIONS[activeLang];
+
   // Classic Lo Shu Grid cell positions
   const gridLayout = [
     [4, 9, 2],
@@ -14,7 +18,7 @@ export default function LoShuGrid({ gridCounts, includeExtra, onToggle }) {
       <div className="card-header justify-between">
         <div className="header-title-wrapper">
           <Grid className="icon-gold" size={20} />
-          <h2>Lo Shu Grid (3×3)</h2>
+          <h2>{labels.loShuGrid}</h2>
         </div>
         <div className="toggle-container">
           <label className="toggle-switch">
@@ -26,14 +30,14 @@ export default function LoShuGrid({ gridCounts, includeExtra, onToggle }) {
             <span className="toggle-slider"></span>
           </label>
           <span className="toggle-label text-sm">
-            Include Moolank & Bhagyank
+            {labels.includeMB}
           </span>
         </div>
       </div>
 
       <div className="grid-instructions">
         <p className="text-sm text-muted">
-          The Lo Shu grid is a 3x3 magic square. Numbers from your birth date map into specific cells, showing your elemental chart.
+          {labels.loShuDesc}
         </p>
       </div>
 
@@ -55,7 +59,7 @@ export default function LoShuGrid({ gridCounts, includeExtra, onToggle }) {
                   >
                     <span className="cell-static-num">{num}</span>
                     {isMissing ? (
-                      <span className="cell-missing-text">Missing</span>
+                      <span className="cell-missing-text">{labels.cellMissing}</span>
                     ) : (
                       <span className="cell-active-repeats">{repeats}</span>
                     )}
@@ -68,8 +72,8 @@ export default function LoShuGrid({ gridCounts, includeExtra, onToggle }) {
       </div>
 
       <div className="grid-legend text-xs text-muted">
-        <div><span className="legend-dot active"></span> Present in birth chart</div>
-        <div><span className="legend-dot missing"></span> Missing energy</div>
+        <div><span className="legend-dot active"></span> {labels.legendActive}</div>
+        <div><span className="legend-dot missing"></span> {labels.legendMissing}</div>
       </div>
     </div>
   );

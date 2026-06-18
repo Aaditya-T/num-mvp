@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Plus, Trash2, Printer, Check, Copy } from 'lucide-react';
 import { numberToWords } from '../utils/numberToWords';
 import PinLockScreen from '../components/PinLockScreen';
@@ -38,6 +38,34 @@ export default function InvoicePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('operator_authenticated') === 'true';
   });
+
+  // Mobile scale: keep the invoice document (min-width 720px) fitting the viewport
+  const invoiceWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const DOC_WIDTH = 720; // matches min-width of .invoice-document
+    const updateScale = () => {
+      const wrapper = invoiceWrapperRef.current;
+      if (!wrapper) return;
+      const available = wrapper.offsetWidth;
+      if (available < DOC_WIDTH) {
+        const scale = available / DOC_WIDTH;
+        wrapper.style.setProperty('--invoice-mobile-scale', scale);
+        const inner = wrapper.querySelector('.invoice-document');
+        if (inner) {
+          wrapper.style.minHeight = (inner.scrollHeight * scale) + 'px';
+        }
+      } else {
+        wrapper.style.removeProperty('--invoice-mobile-scale');
+        wrapper.style.minHeight = '';
+      }
+    };
+
+    const ro = new ResizeObserver(updateScale);
+    if (invoiceWrapperRef.current) ro.observe(invoiceWrapperRef.current);
+    updateScale();
+    return () => ro.disconnect();
+  }, [activeTab]);
   
   // Brand details state (pre-populated, editable)
   const [brandDetails, setBrandDetails] = useState({ ...BRAND_TEMPLATES.mentor });
@@ -669,7 +697,8 @@ export default function InvoicePage() {
             </button>
           </div>
 
-          {/* The Actual Invoice document */}
+          {/* The Actual Invoice document — wrapped for mobile scale-to-fit */}
+          <div className="invoice-document-wrapper" ref={invoiceWrapperRef}>
           <div className={`invoice-document ${brandDetails.themeClass}`}>
             
             {/* Header branding */}
@@ -903,6 +932,7 @@ export default function InvoicePage() {
             </div>
 
           </div>
+          </div>{/* end invoice-document-wrapper */}
 
         </div>
 

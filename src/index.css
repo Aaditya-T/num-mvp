@@ -5119,6 +5119,12 @@ select.form-input option {
   font-weight: 500;
 }
 
+/* Wrapper: desktop = transparent passthrough; mobile = scale-to-fit container */
+.invoice-document-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
 /* THE INVOICE SHEET PREVIEW */
 .invoice-document {
   background-color: #ffffff;
@@ -5137,6 +5143,23 @@ select.form-input option {
   justify-content: space-between;
   flex-shrink: 0; /* Prevents parent flexbox from squishing invoice height, ensuring white background grows with items list */
 }
+
+/* Mobile scale-to-fit for invoice */
+@media (max-width: 768px) {
+  .invoice-document-wrapper {
+    overflow: hidden;
+  }
+
+  .invoice-document {
+    transform-origin: top left;
+    transform: scale(var(--invoice-mobile-scale, 0.52));
+    /* collapse the extra layout-box space below after scaling */
+    margin-bottom: calc((var(--invoice-mobile-scale, 0.52) - 1) * 100%);
+    width: 720px !important;
+    min-width: 720px !important;
+  }
+}
+
 
 .invoice-document *, .invoice-document h1, .invoice-document h2, .invoice-document h3, .invoice-document h4 {
   font-family: var(--font-text);

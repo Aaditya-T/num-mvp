@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Sparkles, Printer, ArrowLeft, RefreshCw, Compass, Edit3, List } from 'lucide-react';
 import NumerologyReport from '../components/report/NumerologyReport';
 import { EditProvider } from '../components/report/EditContext';
@@ -58,6 +58,35 @@ export default function ReportPage() {
   const [currentDraft, setCurrentDraft] = useState(null);
   const [drafts, setDrafts] = useState([]);
   const [showDrafts, setShowDrafts] = useState(false);
+
+  // Mobile PDF scale ref — keeps the A4-width report fitting on narrow viewports
+  const docWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const REPORT_WIDTH = 794; // px — fixed A4 design width
+    const updateScale = () => {
+      if (!docWrapperRef.current) return;
+      const available = docWrapperRef.current.offsetWidth;
+      if (available < REPORT_WIDTH) {
+        const scale = available / REPORT_WIDTH;
+        docWrapperRef.current.style.setProperty('--report-mobile-scale', scale);
+        // Collapse the bottom whitespace that results from scaling
+        const sheet = docWrapperRef.current.querySelector('.report-document-sheet');
+        if (sheet) {
+          const scaledHeight = sheet.scrollHeight * scale;
+          docWrapperRef.current.style.minHeight = scaledHeight + 'px';
+        }
+      } else {
+        docWrapperRef.current.style.removeProperty('--report-mobile-scale');
+        docWrapperRef.current.style.minHeight = '';
+      }
+    };
+
+    const ro = new ResizeObserver(updateScale);
+    if (docWrapperRef.current) ro.observe(docWrapperRef.current);
+    updateScale();
+    return () => ro.disconnect();
+  }, [showReport, isEditMode]);
 
   // Load drafts list on mount
   useEffect(() => {
@@ -417,15 +446,17 @@ export default function ReportPage() {
 
               {/* Main content area: report + optional editor */}
               <div className="report-content-area">
-                {/* Report Document */}
-                <div className="report-document-sheet">
-                  <NumerologyReport
-                    name={inputs.name}
-                    dob={inputs.dob}
-                    gender={inputs.gender}
-                    lang={inputs.language}
-                    brand={inputs.brand || 'mentor'}
-                  />
+                {/* Report Document — wrapped for mobile scaling */}
+                <div className="report-document-wrapper" ref={docWrapperRef}>
+                  <div className="report-document-sheet">
+                    <NumerologyReport
+                      name={inputs.name}
+                      dob={inputs.dob}
+                      gender={inputs.gender}
+                      lang={inputs.language}
+                      brand={inputs.brand || 'mentor'}
+                    />
+                  </div>
                 </div>
 
                 {/* Desktop Editor Panel — only in edit mode */}

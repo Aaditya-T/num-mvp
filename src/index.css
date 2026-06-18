@@ -2554,6 +2554,12 @@ h1, h2, h3, h4, h5, .number-label {
   overflow: hidden;
 }
 
+/* Wrapper for the document — desktop: transparent passthrough; mobile: scaling container */
+.report-document-wrapper {
+  width: 100%;
+  overflow: hidden; /* prevent horizontal scroll on desktop too */
+}
+
 .numerology-report-root {
   display: flex;
   flex-direction: column;
@@ -5917,10 +5923,161 @@ select.form-input option {
   box-shadow: 0 0 10px var(--gold-glow);
 }
 
+/* ════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — REPORT PAGE  (max-width: 768px)
+   ════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+
+  /* ── Top Banner ─────────────────────────────────────────────── */
+  .report-header-banner {
+    padding: 0.65rem 1rem;
+  }
+
   .banner-nav {
     flex-direction: column !important;
-    gap: 0.75rem !important;
-    align-items: center !important;
+    gap: 0.5rem !important;
+    align-items: stretch !important;
+  }
+
+  /* Row 1: back link + "Operator Portal" title side by side */
+  .back-link,
+  .banner-title-group {
+    font-size: 0.8rem;
+  }
+
+  .banner-title-group h2 {
+    font-size: 1rem;
+  }
+
+  /* Row 2: tab switcher – full width, centered */
+  .banner-center-nav {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-tab-link {
+    flex: 1;
+    text-align: center;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* ── Operator Form Card ─────────────────────────────────────── */
+  .report-main-content {
+    padding: 0 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .operator-form-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .form-header-intro h2 {
+    font-size: 1.4rem;
+  }
+
+  .form-group-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* ── Report Control Panel (the top bar above the PDF) ───────── */
+  .report-control-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .control-meta h3 {
+    font-size: 1rem;
+  }
+
+  .control-meta p {
+    font-size: 0.78rem;
+  }
+
+  .control-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  /* Make Print/Save button span full width on its own row */
+  .control-actions .print-action-btn {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .control-actions .btn {
+    font-size: 0.82rem;
+    padding: 0.55rem 0.8rem;
+    justify-content: center;
+  }
+
+  /* ── Report Document Sheet — scaled preview on mobile ───────── */
+  /*
+   * The report is designed for A4 (794px wide).
+   * On mobile we scale it down proportionally so the whole
+   * width fits on screen without horizontal scrolling.
+   * We use a CSS custom property set dynamically via JS (see below),
+   * with a safe CSS fallback.
+   */
+  .report-document-wrapper {
+    overflow-x: hidden;
+    overflow-y: visible;
+    width: 100%;
+  }
+
+  .report-document-sheet {
+    /* Scale the 794px-wide document to fit the viewport */
+    transform-origin: top left;
+    /* The scale value is applied via inline style set by JS.
+       This fallback uses a fixed ~50vw scale for ~375px screens. */
+    transform: scale(var(--report-mobile-scale, 0.47));
+    /* After scaling, the element's layout box is still the original
+       size, so we collapse the extra space using a negative margin trick. */
+    margin-bottom: calc((var(--report-mobile-scale, 0.47) - 1) * 100%);
+    width: 794px; /* fixed A4-width so scaling is predictable */
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* ── Drafts Section ─────────────────────────────────────────── */
+  .drafts-section {
+    margin-top: 1.25rem;
+  }
+
+  .drafts-toggle-btn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small screens (iPhone SE, old Android) */
+@media (max-width: 480px) {
+  .banner-center-nav {
+    padding: 0.2rem 0.3rem;
+  }
+
+  .nav-tab-link {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .report-control-panel {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .control-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .control-actions .print-action-btn {
+    grid-column: 1;
   }
 }

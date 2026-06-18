@@ -3,6 +3,43 @@ import { calculatePersonalYear, calculatePersonalMonth, calculatePersonalDay } f
 import { PERSONAL_YEAR_TEMPLATES } from '../../../utils/reportConstants';
 import EditableText from '../editables/EditableText';
 
+// Dynamic year keywords per personal year number (all 3 languages)
+const YEAR_KEYWORDS = {
+  English: {
+    1: 'New Beginnings & Independence',
+    2: 'Patience, Partnerships & Diplomacy',
+    3: 'Creativity, Expression & Learning',
+    4: 'Hard Work, Discipline & Foundation',
+    5: 'Change, Freedom & Expansion',
+    6: 'Family, Harmony & Responsibility',
+    7: 'Reflection, Spirituality & Analysis',
+    8: 'Ambition, Wealth & Achievement',
+    9: 'Completion, Release & Transition'
+  },
+  Hindi: {
+    1: 'नई शुरुआत और स्वतंत्रता',
+    2: 'धैर्य, साझेदारी और कूटनीति',
+    3: 'रचनात्मकता, अभिव्यक्ति और ज्ञान',
+    4: 'कड़ी मेहनत, अनुशासन और आधारशिला',
+    5: 'परिवर्तन, स्वतंत्रता और विस्तार',
+    6: 'परिवार, सद्भाव और जिम्मेदारी',
+    7: 'आत्मनिरीक्षण, आध्यात्मिकता और विश्लेषण',
+    8: 'महत्वाकांक्षा, धन और उपलब्धि',
+    9: 'पूर्णता, विदाई और परिवर्तन'
+  },
+  Gujarati: {
+    1: 'નવી શરૂઆત અને સ્વતંત્રતા',
+    2: 'ધીરજ, ભાગીદારી અને સંવાદ',
+    3: 'સર્જનાત્મકતા, અભિવ્યક્તિ અને જ્ઞાન',
+    4: 'ભારે મહેનત, શિસ્ત અને પાયો',
+    5: 'પરિવર્તન, સ્વતંત્રતા અને વિસ્તાર',
+    6: 'કુટુંબ, સંવાદિતા અને જવાબદારી',
+    7: 'આત્મ-ચિંતન, આધ્યાત્મિકતા અને સંશોધન',
+    8: 'મહત્વાકાંક્ષા, સમૃદ્ધિ અને સિદ્ધિ',
+    9: 'પૂર્ણતા, વિદાય અને સંક્રાંતિ'
+  }
+};
+
 export default function PersonalCycles({ dob, lang, t }) {
   const today = new Date();
   const year = today.getFullYear();
@@ -12,6 +49,7 @@ export default function PersonalCycles({ dob, lang, t }) {
   const pd = calculatePersonalDay(dob, today);
 
   const yearText = PERSONAL_YEAR_TEMPLATES[lang]?.[py] || '';
+  const currentKeyword = YEAR_KEYWORDS[lang]?.[py] || YEAR_KEYWORDS.English[py] || 'Focus Cycle';
 
   const monthText = lang === 'Hindi' 
     ? `इस महीने ध्यान मुख्य रूप से आपके व्यक्तिगत चक्र के अंक ${pm} की गतिविधियों पर केंद्रित रहेगा।` 
@@ -45,7 +83,7 @@ export default function PersonalCycles({ dob, lang, t }) {
           <h4>{year} - {year + 1}</h4>
           <EditableText editId="personalCycles.yearText" defaultValue={yearText} tag="p" className="cycle-desc" multiline />
           <div className="cycle-keywords">
-            <strong>Keywords:</strong> {py === 6 ? 'Family & Harmony (परिवार और सद्भाव)' : 'Focus Cycle (ध्यान चक्र)'}
+            <strong>{lang === 'Hindi' ? 'मुख्य शब्द:' : lang === 'Gujarati' ? 'મુખ્ય શબ્દ:' : 'Keywords:'}</strong> {currentKeyword}
           </div>
         </div>
       </div>

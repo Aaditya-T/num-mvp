@@ -42,7 +42,7 @@ export function calculatePersonalDay(dobString, targetDate) {
  * Two columns: by DOB date and by Jan 1.
  */
 const LUCK_MAP = {
-  1: 70, 2: 0, 3: 70, 4: 40, 5: 60, 6: 60, 7: 40, 8: 60, 9: 50
+  1: 70, 2: 40, 3: 70, 4: 40, 5: 60, 6: 60, 7: 40, 8: 60, 9: 50
 };
 
 export function calculateLuckFactor(dobString, startYear, count = 10) {

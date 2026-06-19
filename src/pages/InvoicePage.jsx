@@ -34,38 +34,12 @@ const BRAND_TEMPLATES = {
 
 export default function InvoicePage() {
   const [selectedBrand, setSelectedBrand] = useState('mentor');
-  const [activeTab, setActiveTab] = useState('edit');
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem('operator_authenticated') === 'true';
   });
 
   // Mobile scale: keep the invoice document (min-width 720px) fitting the viewport
   const invoiceWrapperRef = useRef(null);
-
-  useEffect(() => {
-    const DOC_WIDTH = 720; // matches min-width of .invoice-document
-    const updateScale = () => {
-      const wrapper = invoiceWrapperRef.current;
-      if (!wrapper) return;
-      const available = wrapper.offsetWidth;
-      if (available < DOC_WIDTH) {
-        const scale = available / DOC_WIDTH;
-        wrapper.style.setProperty('--invoice-mobile-scale', scale);
-        const inner = wrapper.querySelector('.invoice-document');
-        if (inner) {
-          wrapper.style.minHeight = (inner.scrollHeight * scale) + 'px';
-        }
-      } else {
-        wrapper.style.removeProperty('--invoice-mobile-scale');
-        wrapper.style.minHeight = '';
-      }
-    };
-
-    const ro = new ResizeObserver(updateScale);
-    if (invoiceWrapperRef.current) ro.observe(invoiceWrapperRef.current);
-    updateScale();
-    return () => ro.disconnect();
-  }, [activeTab]);
   
   // Brand details state (pre-populated, editable)
   const [brandDetails, setBrandDetails] = useState({ ...BRAND_TEMPLATES.mentor });
@@ -111,6 +85,36 @@ export default function InvoicePage() {
   // Bank details visibility and custom signature upload states
   const [showBankDetails, setShowBankDetails] = useState(false);
   const [customSignature, setCustomSignature] = useState(null);
+
+  useEffect(() => {
+    const DOC_WIDTH = 720;
+    const updateScale = () => {
+      const wrapper = invoiceWrapperRef.current;
+      if (!wrapper) return;
+      const available = wrapper.offsetWidth;
+      if (available < DOC_WIDTH) {
+        const scale = available / DOC_WIDTH;
+        wrapper.style.setProperty('--invoice-mobile-scale', scale);
+        const inner = wrapper.querySelector('.invoice-document');
+        if (inner) {
+          wrapper.style.minHeight = (inner.scrollHeight * scale) + 'px';
+        }
+      } else {
+        wrapper.style.removeProperty('--invoice-mobile-scale');
+        wrapper.style.minHeight = '';
+      }
+    };
+
+    const ro = new ResizeObserver(updateScale);
+    const wrapper = invoiceWrapperRef.current;
+    if (wrapper) {
+      ro.observe(wrapper);
+      const inner = wrapper.querySelector('.invoice-document');
+      if (inner) ro.observe(inner);
+    }
+    updateScale();
+    return () => ro.disconnect();
+  }, [items.length, showBankDetails, customSignature, shipping, cgstPercent, sgstPercent]);
 
   // Reset brand details when brand selection changes
   useEffect(() => {
@@ -244,6 +248,10 @@ export default function InvoicePage() {
     : '';
 
   const handlePrint = () => {
+    if (invoiceWrapperRef.current) {
+      invoiceWrapperRef.current.style.removeProperty('--invoice-mobile-scale');
+      invoiceWrapperRef.current.style.minHeight = '';
+    }
     window.print();
   };
 
@@ -280,26 +288,9 @@ export default function InvoicePage() {
         </div>
       </div>
 
-      {/* Mobile Tab Switcher - hidden on desktop and print */}
-      <div className="invoice-mobile-tabs hide-on-print">
-        <button 
-          className={`mobile-tab-btn ${activeTab === 'edit' ? 'active' : ''}`}
-          onClick={() => setActiveTab('edit')}
-        >
-          Edit Details
-        </button>
-        <button 
-          className={`mobile-tab-btn ${activeTab === 'preview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('preview')}
-        >
-          Live Preview
-        </button>
-      </div>
-
       <div className="invoice-workspace-layout">
-        
         {/* LEFT PANEL: INPUT FORM (Hidden on print) */}
-        <div className={`invoice-form-panel hide-on-print ${activeTab === 'edit' ? 'show-mobile' : 'hide-mobile'}`}>
+        <div className="invoice-form-panel hide-on-print">
           
           {/* Brand Config */}
           <div className="form-section-card">
@@ -686,7 +677,7 @@ export default function InvoicePage() {
         </div>
 
         {/* RIGHT PANEL: PRINT PREVIEW SHEET */}
-        <div className={`invoice-sheet-preview ${activeTab === 'preview' ? 'show-mobile' : 'hide-mobile'}`}>
+        <div className="invoice-sheet-preview">
           
           {/* Action Row */}
           <div className="preview-action-row hide-on-print">

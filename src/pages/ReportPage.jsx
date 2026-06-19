@@ -125,6 +125,11 @@ export default function ReportPage() {
   };
 
   const handlePrint = () => {
+    // Clear mobile scale layout so print uses full-size A4 content
+    if (docWrapperRef.current) {
+      docWrapperRef.current.style.removeProperty('--report-mobile-scale');
+      docWrapperRef.current.style.minHeight = '';
+    }
     window.print();
   };
 

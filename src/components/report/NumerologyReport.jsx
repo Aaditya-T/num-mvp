@@ -45,7 +45,7 @@ export default function NumerologyReport({ name, dob, gender, lang }) {
     <div className="numerology-report-root">
       
       {/* 1. COVER PAGE / PROFILE HEADER */}
-      <ReportSection showHeader={false} className="cover-section" sectionId="cover">
+      <ReportSection showHeader={false} showFooter={false} className="cover-section" sectionId="cover">
         <ProfileHeader
           name={name}
           dob={dob}

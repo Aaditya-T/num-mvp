@@ -1,7 +1,7 @@
 import EditableSection from './editables/EditableSection';
 import { useEdit } from './EditContext';
 
-export default function ReportSection({ title, children, showHeader = true, className = '', sectionId = '' }) {
+export default function ReportSection({ title, children, showHeader = true, showFooter = true, className = '', sectionId = '' }) {
   const { brand } = useEdit();
 
   const brandInfo = {
@@ -36,9 +36,11 @@ export default function ReportSection({ title, children, showHeader = true, clas
         <div className="report-section-content">
           {children}
         </div>
-        <div className="report-section-footer-print">
-          <div className="print-footer-text">{currentBrand.footer}</div>
-        </div>
+        {showFooter && (
+          <div className="report-section-footer-print">
+            <div className="print-footer-text">{currentBrand.footer}</div>
+          </div>
+        )}
       </div>
     </EditableSection>
   );

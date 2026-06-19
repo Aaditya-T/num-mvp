@@ -2570,10 +2570,14 @@ h1, h2, h3, h4, h5, .number-label {
 .report-section-container {
   display: flex;
   flex-direction: column;
-  min-height: 270mm;
   position: relative;
   padding: 3rem;
   border-bottom: 1px solid #f1ece5;
+}
+
+/* Screen preview: cover fills one A4 page; inner sections size to content */
+.report-section-container.cover-section {
+  min-height: 270mm;
 }
 
 .report-section-header-print {
@@ -3697,16 +3701,24 @@ h1, h2, h3, h4, h5, .number-label {
     background: #ffffff !important;
     color: #000000 !important;
     font-size: 11pt !important;
-    width: 210mm !important;
-    min-height: 297mm !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .report-page-container {
+  .report-page-container,
+  .report-preview-layout,
+  .report-content-area {
     background: #ffffff !important;
     padding: 0 !important;
+    margin: 0 !important;
     min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
   }
 
   .report-main-content {
@@ -3715,23 +3727,35 @@ h1, h2, h3, h4, h5, .number-label {
     padding: 0 !important;
   }
 
+  .report-document-wrapper {
+    overflow: visible !important;
+    min-height: auto !important;
+    width: 100% !important;
+  }
+
   .report-document-sheet {
     box-shadow: none !important;
     border-radius: 0 !important;
     padding: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
   }
 
   .numerology-report-root {
     gap: 0 !important;
   }
 
-  /* Force clean page breaks on A4 */
+  /* One section per page without forced empty fill or duplicate blank pages */
   .report-section-container {
-    page-break-before: always !important;
-    break-before: page !important;
+    page-break-before: auto !important;
+    break-before: auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
     page-break-inside: auto !important;
     break-inside: auto !important;
-    min-height: 297mm !important; /* Force standard A4 size */
+    min-height: auto !important;
     padding: 14mm 13mm 12mm !important;
     box-sizing: border-box !important;
     display: block !important;
@@ -3739,10 +3763,16 @@ h1, h2, h3, h4, h5, .number-label {
     overflow: visible !important;
   }
 
-  /* Hide covers page-break-before to start cleanly */
-  .report-section-container:first-of-type {
-    page-break-before: avoid !important;
-    break-before: auto !important;
+  .report-section-container:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* Cover page fills one sheet; content sections flow naturally */
+  .report-section-container.cover-section {
+    min-height: calc(297mm - 26mm) !important;
+    page-break-after: always !important;
+    break-after: page !important;
   }
 
   /* Header & Footer Brand for Print Mode */
@@ -5664,7 +5694,6 @@ select.form-input option {
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    width: 210mm !important;
     height: auto !important; /* Permits multi-page height expansion dynamically when printing */
     font-size: 12pt !important;
   }
@@ -6102,5 +6131,43 @@ select.form-input option {
 
   .control-actions .print-action-btn {
     grid-column: 1;
+  }
+}
+
+/* Report PDF — final overrides (must load after invoice/mobile print rules) */
+@media print {
+  html:has(.report-page-container),
+  body:has(.report-page-container) {
+    width: auto !important;
+    font-size: 11pt !important;
+  }
+
+  .report-page-container .report-document-wrapper {
+    overflow: visible !important;
+    min-height: auto !important;
+  }
+
+  .report-page-container .report-document-sheet {
+    transform: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .report-page-container .report-section-container {
+    min-height: auto !important;
+    page-break-before: auto !important;
+    break-before: auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .report-page-container .report-section-container.cover-section {
+    min-height: calc(297mm - 26mm) !important;
+  }
+
+  .report-page-container .report-section-container:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 }

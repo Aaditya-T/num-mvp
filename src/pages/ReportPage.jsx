@@ -298,7 +298,6 @@ export default function ReportPage() {
             <div className="form-header-intro">
               <Compass className="animate-spin-slow text-gold" size={36} />
               <h2>Operator Report Generator</h2>
-              <p>Enter the client's information to generate a comprehensive, print-ready 40-page style numerology report.</p>
             </div>
             
             <form onSubmit={handleSubmit} className="operator-form">

@@ -7,7 +7,7 @@ export default function ReportSection({ title, children, showHeader = true, show
   const brandInfo = {
     mentor: {
       name: 'Mentor Universe',
-      phone: '+91 95125 07831 | shivastro37@gmail.com',
+      phone: '',
       footer: 'Hardik J Vvaidhya | Anand Center | Phone: +91 95125 07831, +91 95378 36955'
     },
     numero: {

@@ -2599,6 +2599,7 @@ h1, h2, h3, h4, h5, .number-label {
 /* Screen preview: cover fills one A4 page; inner sections size to content */
 .report-section-container.cover-section {
   min-height: 270mm;
+  position: relative;
 }
 
 .report-section-header-print {
@@ -2621,11 +2622,19 @@ h1, h2, h3, h4, h5, .number-label {
 /* Profile Header Section */
 .report-profile-cover {
   text-align: center;
-  padding: 2.25rem 2rem 1rem;
+  padding: 2.25rem 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  min-height: 240mm; /* fills the cover section so partners pin to bottom */
+}
+
+.report-cover-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .report-cover-logo-wrapper {
@@ -2718,10 +2727,11 @@ h1, h2, h3, h4, h5, .number-label {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 600px;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  max-width: 700px;
+  margin-top: 0;
+  padding-top: 1rem;
   border-top: 1px dashed #e1d8cd;
+  /* Sits at the very bottom of the cover flex column — no margin expansion */
 }
 
 .partner-col {
@@ -3931,7 +3941,8 @@ h1, h2, h3, h4, h5, .number-label {
   }
 
   .report-profile-cover {
-    padding: 10mm 8mm 0 !important;
+    padding: 8mm 8mm 6mm !important;
+    justify-content: space-between !important;
   }
 
   .report-cover-logo {
@@ -3939,8 +3950,8 @@ h1, h2, h3, h4, h5, .number-label {
   }
 
   .report-cover-partners {
-    margin-top: 10mm !important;
-    padding-top: 5mm !important;
+    margin-top: 0 !important;
+    padding-top: 4mm !important;
     border-top: 1px dashed #cccccc !important;
   }
 

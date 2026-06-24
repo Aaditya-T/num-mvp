@@ -78,6 +78,17 @@ export default function ProfileHeader({ name, dob, gender, age, moolank, bhagyan
           </div>
         </div>
       </div>
+
+      <div className="report-cover-partners">
+        <div className="partner-col partner-left">
+          <strong>Hardik J Vaidhya</strong>
+          <span>+91 95125 07831, +91 95378 36955</span>
+        </div>
+        <div className="partner-col partner-right">
+          <strong>Payal Trivedi</strong>
+          <span>+91 96870 62789</span>
+        </div>
+      </div>
     </div>
   );
 }

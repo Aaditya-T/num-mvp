@@ -2403,6 +2403,10 @@ h1, h2, h3, h4, h5, .number-label {
   padding: 0 1.5rem;
 }
 
+.report-page-container.edit-mode-active .report-main-content {
+  max-width: 1200px;
+}
+
 /* Operator Input Form */
 .operator-form-card {
   background: var(--card-bg-dark);
@@ -2552,12 +2556,29 @@ h1, h2, h3, h4, h5, .number-label {
   padding: 0;
   box-shadow: var(--shadow-premium);
   overflow: hidden;
+  width: 794px;
+  margin: 0 auto;
 }
 
 /* Wrapper for the document — desktop: transparent passthrough; mobile: scaling container */
 .report-document-wrapper {
   width: 100%;
   overflow: hidden; /* prevent horizontal scroll on desktop too */
+}
+
+/* Transform-scale the 794px report sheet when available width is restricted */
+.report-document-wrapper[style*="--report-mobile-scale"] {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.report-document-wrapper[style*="--report-mobile-scale"] .report-document-sheet {
+  transform-origin: top left !important;
+  transform: scale(var(--report-mobile-scale)) !important;
+  margin-bottom: calc((var(--report-mobile-scale) - 1) * 100%) !important;
+  width: 794px !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .numerology-report-root {
@@ -2612,7 +2633,7 @@ h1, h2, h3, h4, h5, .number-label {
 }
 
 .report-cover-logo {
-  width: 120px;
+  width: 170px;
   height: auto;
 }
 
@@ -2691,6 +2712,39 @@ h1, h2, h3, h4, h5, .number-label {
   flex-direction: column;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.report-cover-partners {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e1d8cd;
+}
+
+.partner-col {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.partner-col.partner-right {
+  text-align: right;
+}
+
+.partner-col strong {
+  color: #4a3e3d;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.partner-col span {
+  color: #666;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
 }
 
 /* Executive Summary */
@@ -3800,15 +3854,26 @@ h1, h2, h3, h4, h5, .number-label {
   .report-section-footer-print {
     display: block !important;
     width: 100% !important;
-    text-align: center !important;
     border-top: 1px solid #dddddd !important;
     padding-top: 2mm !important;
     margin-top: 10mm !important;
   }
 
-  .print-footer-text {
+  .print-footer-partners {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
     font-size: 8pt !important;
     color: #777777 !important;
+    font-family: 'Outfit', sans-serif !important;
+  }
+
+  .print-footer-left {
+    text-align: left !important;
+  }
+
+  .print-footer-right {
+    text-align: right !important;
   }
 
   /* Hide print buttons and controls */
@@ -3870,7 +3935,21 @@ h1, h2, h3, h4, h5, .number-label {
   }
 
   .report-cover-logo {
-    width: 95px !important;
+    width: 150px !important;
+  }
+
+  .report-cover-partners {
+    margin-top: 10mm !important;
+    padding-top: 5mm !important;
+    border-top: 1px dashed #cccccc !important;
+  }
+
+  .partner-col strong {
+    font-size: 10pt !important;
+  }
+
+  .partner-col span {
+    font-size: 8pt !important;
   }
 
   .report-cover-logo-wrapper {
@@ -4430,9 +4509,10 @@ h1, h2, h3, h4, h5, .number-label {
 
 .report-preview-layout.with-editor .report-content-area {
   display: flex;
+  align-items: flex-start;
 }
 
-.report-preview-layout.with-editor .report-document-sheet {
+.report-preview-layout.with-editor .report-document-wrapper {
   flex: 1;
   min-width: 0;
 }
@@ -5235,8 +5315,8 @@ select.form-input option {
 }
 
 .inv-logo-box {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;

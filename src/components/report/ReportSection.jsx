@@ -38,7 +38,14 @@ export default function ReportSection({ title, children, showHeader = true, show
         </div>
         {showFooter && (
           <div className="report-section-footer-print">
-            <div className="print-footer-text">{currentBrand.footer}</div>
+            <div className="print-footer-partners">
+              <div className="print-footer-left">
+                <strong>Hardik J Vaidhya:</strong> +91 95125 07831, +91 95378 36955
+              </div>
+              <div className="print-footer-right">
+                <strong>Payal Trivedi:</strong> +91 96870 62789
+              </div>
+            </div>
           </div>
         )}
       </div>

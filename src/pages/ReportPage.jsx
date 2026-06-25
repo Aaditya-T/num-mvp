@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Sparkles, Printer, ArrowLeft, RefreshCw, Compass, Edit3, List } from 'lucide-react';
+import { Sparkles, Printer, RefreshCw, Compass, Edit3, List } from 'lucide-react';
 import NumerologyReport from '../components/report/NumerologyReport';
 import { EditProvider } from '../components/report/EditContext';
 import EditorPanel from '../components/report/editor/EditorPanel';
@@ -269,28 +269,6 @@ export default function ReportPage() {
 
   return (
     <div className={`report-page-container ${isEditMode ? 'edit-mode-active' : ''}`}>
-      {/* Top Banner - hidden during printing */}
-      <div className="report-header-banner hide-on-print">
-        <div className="banner-nav">
-          <a href="/" className="back-link">
-            <ArrowLeft size={16} />
-            <span>Public Website</span>
-          </a>
-          <div className="banner-center-nav">
-            <a href="#/report" className="nav-tab-link active">
-              Report Generator
-            </a>
-            <a href="#/invoice" className="nav-tab-link">
-              Invoice Generator
-            </a>
-          </div>
-          <div className="banner-title-group">
-            <Sparkles size={18} className="icon-gold" />
-            <h2>Operator Portal</h2>
-          </div>
-        </div>
-      </div>
-
       <div className="report-main-content">
         {!showReport ? (
           /* OPERATOR INPUT FORM */

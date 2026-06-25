@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Plus, Trash2, Printer, Check, Copy } from 'lucide-react';
+import { Plus, Trash2, Printer, Check, Copy } from 'lucide-react';
 import { numberToWords } from '../utils/numberToWords';
 import PinLockScreen from '../components/PinLockScreen';
 
@@ -267,27 +267,6 @@ export default function InvoicePage() {
 
   return (
     <div className="invoice-page-container">
-      {/* Top Banner - hidden on print */}
-      <div className="report-header-banner hide-on-print">
-        <div className="banner-nav">
-          <a href="/" className="back-link">
-            <ArrowLeft size={16} />
-            <span>Public Website</span>
-          </a>
-          <div className="banner-center-nav">
-            <a href="#/report" className="nav-tab-link">
-              Report Generator
-            </a>
-            <a href="#/invoice" className="nav-tab-link active">
-              Invoice Generator
-            </a>
-          </div>
-          <div className="banner-title-group">
-            <h2>Operator Portal</h2>
-          </div>
-        </div>
-      </div>
-
       <div className="invoice-workspace-layout">
         {/* LEFT PANEL: INPUT FORM (Hidden on print) */}
         <div className="invoice-form-panel hide-on-print">
